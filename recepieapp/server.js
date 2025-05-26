@@ -1,31 +1,15 @@
-const express = require('express');
-const dotenv = require('dotenv');
-const connectDB = require('./config/db');
-const recipeRoutes = require('./routes/recipeRoutes');
+const app=require("./app");
+const mongoose=require('mongoose')
+const { MONGODB_URI } = require('./utils/config');
 
-// Initialize app
-const app = express();
-
-// Load environment variables
-dotenv.config();
-
-// Connect Database
-connectDB();
-
-// Middleware
-app.use(express.json());
-
-// Routes
-app.use('/api/recipes', recipeRoutes);
-
-// Root route
-app.get('/', (req, res) => {
-  res.send('Welcome to Recipes API!');
+mongoose.connect( MONGODB_URI)
+.then(()=>{
+    console.log("connected to the mongodb")
+})
+.catch((err)=>{
+    console.log(`error connecting to the mongodd:${err.message}`)
 });
-
-// Start server
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+app.listen('3000',()=>{
+    console.log(`Server is running @ http://127.0.0.1:3000`);
+    console.log(`Press Ctrl + C to stop the server`);
+})
